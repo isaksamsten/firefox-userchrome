@@ -1,0 +1,24 @@
+/*dark*/
+/*frame is sidebar background*/
+/*toolbar is header background*/
+/*modify the text to match your background*/
+
+
+@media (prefers-color-scheme: dark) {
+  #root.root {
+    --frame-bg: rgb(43,42,50) !important;
+    --toolbar-bg: rgb(43,42,50) !important;
+  }
+}
+@media (prefers-color-scheme: light) {
+  #root.root {
+    --frame-bg: rgb(249,249,251) !important;
+    --toolbar-bg: rgb(249,249,251) !important;
+  }
+}
+/* --------------------------------------------------- */
+
+/*light*/ /*frame is sidebar background*/
+/*toolbar is header background*/
+/*modify the text to match your background*/
+

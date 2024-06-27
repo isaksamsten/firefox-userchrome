@@ -1,0 +1,343 @@
+/* Source file https://github.com/MrOtherGuy/firefox-csshacks/tree/master/chrome/window_control_placeholder_support.css made available under Mozilla Public License v. 2.0
+See the above repository for updates as well as full license text. */
+
+/* Creates placeholders for window controls */
+/* This is a supporting file used by other stylesheets */
+
+/* This stylesheet is pretty much unnecessary if window titlebar is enabled */
+
+/* This file should preferably be imported before other stylesheets */
+
+/* Defaults for window controls on RIGHT side of the window */
+/* Modify these values to match your preferences */
+:root:is([tabsintitlebar], [sizemode="fullscreen"]) {
+  --uc-window-control-width: 138px; /* Space reserved for window controls (Win10) */
+  /* Extra space reserved on both sides of the nav-bar to be able to drag the window */
+  --uc-window-drag-space-pre: 0px; /* left side*/
+  --uc-window-drag-space-post: 0px; /* right side*/
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --toolbar-background-color-custom: rgb(43,42,50);
+  }
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --toolbar-background-color-custom: rgb(249,249,251);
+  }
+}
+
+:root:is([tabsintitlebar][sizemode="maximized"], [sizemode="fullscreen"]) {
+  --uc-window-drag-space-pre: 0px; /* Remove pre space */
+}
+
+@media  (-moz-platform: windows-win7),
+        (-moz-platform: windows-win8){
+  :root:is([tabsintitlebar], [sizemode="fullscreen"]) {
+    --uc-window-control-width: 105px;
+  }
+}
+
+@media (-moz-gtk-csd-available) {
+  :root:is([tabsintitlebar],[sizemode="fullscreen"]) {
+    --uc-window-control-width: 84px;
+  }
+}
+@media (-moz-platform: macos){
+  :root:is([tabsintitlebar]) {
+    --uc-window-control-width: 72px;
+  }
+  :root:is([tabsintitlebar][sizemode="fullscreen"]) {
+    --uc-window-control-width: 0;
+  }
+}
+
+.titlebar-buttonbox, #window-controls{ color: var(--toolbar-color) }
+:root[sizemode="fullscreen"] .titlebar-buttonbox-container{ display: none }
+:root[sizemode="fullscreen"] #navigator-toolbox { position: relative; }
+
+:root[sizemode="fullscreen"] #TabsToolbar > .titlebar-buttonbox-container:last-child,
+:root[sizemode="fullscreen"] #window-controls{
+  position: absolute;
+  display: flex;
+  top: 0;
+  right:0;
+  height: 40px;
+}
+
+:root[sizemode="fullscreen"] #TabsToolbar > .titlebar-buttonbox-container:last-child,
+:root[uidensity="compact"][sizemode="fullscreen"] #window-controls{ height: 25px }
+
+#nav-bar{
+  border-inline: var(--uc-window-drag-space-pre,0px) solid transparent;
+  border-inline-style: solid !important;
+  border-right-width: calc(var(--uc-window-control-width,0px) + var(--uc-window-drag-space-post,0px));
+  background-clip: border-box !important;
+}
+
+/* Rules for window controls on left layout */
+@media (-moz-bool-pref: "userchrome.force-window-controls-on-left.enabled"),
+       (-moz-gtk-csd-reversed-placement),
+       (-moz-platform: macos){
+  :root[tabsintitlebar="true"] #nav-bar{
+    border-inline-width: calc(var(--uc-window-control-width,0px) + var(--uc-window-drag-space-post,0px)) var(--uc-window-drag-space-pre,0px)
+  }
+  :root[sizemode="fullscreen"] #TabsToolbar > .titlebar-buttonbox-container:last-child,
+  :root[sizemode="fullscreen"] #window-controls{ right: unset }
+}
+@media (-moz-bool-pref: "userchrome.force-window-controls-on-left.enabled"){
+  .titlebar-buttonbox-container{
+    order: -1 !important;
+  }
+  .titlebar-buttonbox{
+    flex-direction: row-reverse;
+  }
+}
+
+:root{
+  /* urlbar */
+  --toolbar-field-background-color: var(--toolbar-background-color-custom) !important;
+  --toolbar-field-focus-background-color: var(--toolbar-background-color-custom) !important;
+}
+
+#nav-bar {
+  height: 25px !important;
+}
+
+#nav-bar .toolbarbutton-1:not([type="menu-button"]),
+#nav-bar .toolbarbutton-1 > .toolbarbutton-menubutton-button,
+#nav-bar .toolbarbutton-1 > .toolbarbutton-menubutton-dropmarker {
+  padding: 0 !important;
+}
+
+/* Source file https://github.com/MrOtherGuy/firefox-csshacks/tree/master/chrome/autohide_main_toolbar.css made available under Mozilla Public License v. 2.0
+See the above repository for updates as well as full license text. */
+
+/* This style hides the main toolbar and shows it when the cursor is over the tabs toolbar as well as whenever the focus is inside nav-bar, such as when urlbar is focused. */
+
+/* :root{ --uc-navbar-transform: -40px } */
+/* :root[uidensity="compact"]{ --uc-navbar-transform: -34px } */
+/**/
+/* #navigator-toolbox > div{ display: contents; } */
+/* :root[sessionrestored] :where(#nav-bar,#PersonalToolbar,#tab-notification-deck,.global-notificationbox){ */
+/*   transform: translateY(var(--uc-navbar-transform)) */
+/* } */
+/* :root:is([customizing],[chromehidden*="toolbar"]) :where(#nav-bar,#PersonalToolbar,#tab-notification-deck,.global-notificationbox){ */
+/*   transform: none !important; */
+/*   opacity: 1 !important; */
+/* } */
+/**/
+/* #nav-bar:not([customizing]){ */
+/*   opacity: 0; */
+/*   transition:  transform 400ms ease 1.0s, opacity 400ms ease 1.0s !important; */
+/*   position: relative; */
+/*   z-index: 2; */
+/* } */
+/* #titlebar{ position: relative; z-index: 3 } */
+/**/
+/* /* Show when toolbox is focused, like when urlbar has received focus */ */
+/* #navigator-toolbox:focus-within > .browser-toolbar{ */
+/*   transform: translateY(0); */
+/*   opacity: 1; */
+/*   transition-duration: 500ms, 200ms !important; */
+/*   transition-delay: 0s !important; */
+/* } */
+/* /* Show when toolbox is hovered */ */
+/* #titlebar:hover ~ .browser-toolbar, */
+/* #nav-bar:hover, */
+/* #nav-bar:hover + #PersonalToolbar{ */
+/*   transform: translateY(0); */
+/*   opacity: 1; */
+/*   transition-duration: 500ms, 200ms !important; */
+/*   transition-delay: 0s !important; */
+/* } */
+/* /* This ruleset is separate, because not having :has support breaks other selectors as well */ */
+/* #mainPopupSet:has(> #appMenu-popup:hover) ~ #navigator-toolbox > .browser-toolbar{ */
+/*   transition-delay: 33ms !important; */
+/*   transform: translateY(0); */
+/*   opacity: 1; */
+/* } */
+/**/
+/* /* Bookmarks toolbar needs so extra rules */ */
+/* #PersonalToolbar{ transition: transform 400ms ease 1.0s !important; position: relative; z-index: 1 } */
+/**/
+/* /* Move up the content view */ */
+/* :root[sessionrestored]:not([inFullscreen],[chromehidden~="toolbar"]) > body > #browser{ margin-top: var(--uc-navbar-transform); } */
+/**/
+/* hide_tabs_toolbar_osx */
+:root{ --uc-toolbar-height: 25px; }
+:root:not([uidensity="compact"]){ --uc-toolbar-height: 25px; }
+
+#TabsToolbar > *{ visibility: collapse !important }
+:root[sizemode="fullscreen"] #TabsToolbar > #window-controls{ visibility: visible !important; z-index: 2 }
+#TabsToolbar > .titlebar-buttonbox-container{
+  visibility: visible !important;
+  height:var(--uc-toolbar-height) !important;
+}
+
+#nav-bar{
+  margin-top: calc(0px - var(--uc-toolbar-height));
+}
+ :root[inFullscreen] #navigator-toolbox{ margin-top: 11px }
+
+#statuspanel-label{
+  visibility: collapse !important;
+}
+
+.urlbar-input-box {
+  font-family: "SF Pro Display" !important;
+  font-size: 12px !important;
+}
+#urlbar-background
+{
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+#back-button,
+#forward-button {
+  display: none !important;
+}
+/* https://mrotherguy.github.io/firefox-csshacks/?file=minimal_toolbarbuttons.css */
+toolbar .toolbarbutton-1:not([open]),
+.titlebar-button,
+#tabbrowser-tabs toolbarbutton,
+#scrollbutton-up:not(:hover),
+#scrollbutton-down:not(:hover){
+  /* background-image: radial-gradient(circle at center, var(--toolbarbutton-icon-fill,currentColor) 0,var(--toolbarbutton-icon-fill,currentColor) 10%,transparent 15% ); */
+}
+/* Hide placeholder on hover */
+toolbar:hover + toolbar .toolbarbutton-1,
+vbox:hover + toolbar .toolbarbutton-1,
+toolbar:hover .toolbarbutton-1,
+#tabbrowser-tabs:hover toolbarbutton,
+.titlebar-buttonbox:hover > .titlebar-button{ background-image: none }
+
+
+toolbar .toolbarbutton-1 > *,
+.titlebar-button > *,
+#tabbrowser-tabs toolbarbutton > *{
+  transform: scale(0);
+  transition: transform 82ms linear !important;
+}
+#scrollbutton-up > .toolbarbutton-icon,
+#scrollbutton-down > .toolbarbutton-icon{ transform: scale(0) !important; transition: transform 82ms linear !important; }
+
+toolbar:hover + toolbar .toolbarbutton-1 > *,
+vbox:hover + toolbar .toolbarbutton-1 > *,
+toolbar:hover .toolbarbutton-1 > *,
+.toolbarbutton-1[open] > *,
+.titlebar-buttonbox:hover > .titlebar-button > *,
+#tabbrowser-tabs:hover toolbarbutton > *{
+  transform: scale(1)
+}
+#scrollbutton-up:hover > .toolbarbutton-icon{ transform: scale(1) !important }
+#scrollbutton-down:hover > .toolbarbutton-icon{ transform: scale(-1) !important }
+
+/* Urlbar icons, this way they show colors is applicable */
+.urlbar-icon{ transition: transform 82ms linear !important; }
+#urlbar:not(:hover) .urlbar-icon:not([open]){ transform: scale(0.0) }
+
+/* The menu button has some margin on non-compact density which creates annnoying transitions */
+/* Lets remove that as well as border since this is minimal style anyway */
+#PanelUI-button{ border-left: 0px !important; margin-left: 0px !important; }
+
+/* Add a glow-effect to some buttons when it has some "alert" */
+#nav-bar:not(:hover) > #PanelUI-button > #PanelUI-menu-button[badge-status],
+#navigator-toolbox:not(:hover) #downloads-button[attention]{
+  filter: brightness(2) drop-shadow(0 0 3px orange) drop-shadow(0 0 1px orange);
+}
+#nav-bar:not(:hover) > #PanelUI-button > #PanelUI-menu-button[badge-status^="update"],
+#navigator-toolbox:not(:hover) #downloads-button[attention="success"]{
+  filter: brightness(2) drop-shadow(0 0 2px cyan) drop-shadow(0 0 1px cyan);
+}
+
+/* hide header of sidebar */
+#sidebar-box #sidebar-header {
+  display: none !important;
+}
+
+#sidebar-box{
+  --uc-sidebar-width: 35px;
+  --uc-sidebar-hover-width: 210px;
+  --uc-autohide-sidebar-delay: 600ms; /* Wait 0.6s before hiding sidebar */
+  --uc-autohide-transition-duration: 115ms;
+  --uc-autohide-transition-type: linear;
+  position: relative;
+  min-width: var(--uc-sidebar-width) !important;
+  width: var(--uc-sidebar-width) !important;
+  max-width: var(--uc-sidebar-width) !important;
+  z-index:1;
+}
+
+#sidebar-box[positionend]{ direction: rtl }
+#sidebar-box[positionend] > *{ direction: ltr }
+
+#sidebar-box[positionend]:-moz-locale-dir(rtl){ direction: ltr }
+#sidebar-box[positionend]:-moz-locale-dir(rtl) > *{ direction: rtl }
+
+#main-window[sizemode="fullscreen"] #sidebar-box{ --uc-sidebar-width: 1px; }
+
+#sidebar-splitter{ display: none }
+
+#sidebar-header{
+  overflow: hidden;
+  color: var(--chrome-color, inherit) !important;
+  padding-inline: 0 !important;
+}
+
+#sidebar-header::before,
+#sidebar-header::after{
+  content: "";
+  display: flex;
+  padding-left: 8px;
+}
+
+#sidebar-header,
+#sidebar{
+  transition: min-width var(--uc-autohide-transition-duration) var(--uc-autohide-transition-type) var(--uc-autohide-sidebar-delay) !important;
+  min-width: var(--uc-sidebar-width) !important;
+  will-change: min-width;
+}
+#sidebar-box:hover > #sidebar-header,
+#sidebar-box:hover > #sidebar{
+  min-width: var(--uc-sidebar-hover-width) !important;
+  transition-delay: 0ms !important;
+}
+
+.sidebar-panel{
+  background-color: transparent !important;
+  color: var(--newtab-text-primary-color) !important;
+}
+
+.sidebar-panel #search-box{
+  -moz-appearance: none !important;
+  background-color: rgba(249,249,250,0.1) !important;
+  color: inherit !important;
+}
+
+/* Add sidebar divider and give it background */
+
+#sidebar,
+#sidebar-header{
+  background-color: var(--toolbar-background-color-custom) !important;
+  border-inline: none;
+  border-inline-width: 0px 1px;
+}
+
+#sidebar-box:not([positionend]) > :-moz-locale-dir(rtl),
+#sidebar-box[positionend] > *{
+  border-inline-width: 1px 0px;
+}
+
+/* Move statuspanel to the other side when sidebar is hovered so it doesn't get covered by sidebar */
+
+#sidebar-box:not([positionend]):hover ~ #appcontent #statuspanel{
+  inset-inline: auto 0px !important;
+}
+#sidebar-box:not([positionend]):hover ~ #appcontent #statuspanel-label{
+  margin-inline: 0px !important;
+  border-left-style: solid !important;
+}
