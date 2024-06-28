@@ -20,11 +20,13 @@ See the above repository for updates as well as full license text. */
 @media (prefers-color-scheme: dark) {
   :root {
     --toolbar-background-color-custom: rgb(43,42,50);
+    --custom-border-color: rgb(1,1,1);
   }
 }
 @media (prefers-color-scheme: light) {
   :root {
-    --toolbar-background-color-custom: rgb(249,249,251);
+    --toolbar-background-color-custom: rgba(249,249,251);
+    --custom-border-color: rgb(218, 217, 217);
   }
 }
 
@@ -323,7 +325,7 @@ toolbar:hover .toolbarbutton-1 > *,
 #sidebar,
 #sidebar-header{
   background-color: var(--toolbar-background-color-custom) !important;
-  border-inline: none;
+  border-inline: 1px solid var(--custom-border-color);
   border-inline-width: 0px 1px;
 }
 
